@@ -16,15 +16,8 @@ RUN uv pip install --system -r requirements.txt
 # Copy the application code
 COPY . .
 
-# Expose the port Chainlit runs on
-EXPOSE 8000
+# Expose the port for Hugging Face Spaces (required)
+EXPOSE 7860
 
-# Command to run the application
-CMD ["chainlit", "run", "app.py", "--host", "0.0.0.0", "--port", "8000"]
-
-# Add this line to your Dockerfile
-RUN --mount=type=secret,id=openai_api_key \
-    cat /run/secrets/openai_api_key > /app/.env
-
-ARG OPENAI_API_KEY
-ENV OPENAI_API_KEY=$OPENAI_API_KEY 
+# Command to run the application on Hugging Face's required port
+CMD ["chainlit", "run", "app.py", "--host", "0.0.0.0", "--port", "7860"] 
