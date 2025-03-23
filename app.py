@@ -21,27 +21,43 @@ SYSTEM_PROMPT = "You are a helpful, friendly AI assistant. Provide clear and con
 @cl.on_chat_start
 async def start():
     """
-    Initialize the chat session:
-    - Create OpenAI client
-    - Set up message history with system prompt
-    - Configure model settings
-    - Send welcome message
+    Initialize the chat session
     """
-    # Initialize OpenAI client
-    client = AsyncOpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
-    cl.user_session.set("client", client)
-    
-    # Initialize message history with system prompt
-    message_history = [{"role": "system", "content": SYSTEM_PROMPT}]
-    cl.user_session.set("message_history", message_history)
-    
-    # Save model settings
-    cl.user_session.set("settings", DEFAULT_SETTINGS)
-    
-    # Send welcome message
-    await cl.Message(
-        content="Hello! I'm your AI assistant powered by OpenAI. How can I help you today?"
-    ).send()
+    try:
+        api_key = os.environ.get("OPENAI_API_KEY")
+        if not api_key:
+            raise ValueError("OPENAI_API_KEY environment variable is not set")
+        
+        # Initialize OpenAI client
+        client = AsyncOpenAI(api_key=api_key)
+        # Test the API key with a simple request
+        await client.chat.completions.create(
+            model="gpt-3.5-turbo",
+            messages=[{"role": "system", "content": "Test"}],
+            max_tokens=5
+        )
+        
+        cl.user_session.set("client", client)
+        
+        # Initialize message history with system prompt
+        message_history = [{"role": "system", "content": SYSTEM_PROMPT}]
+        cl.user_session.set("message_history", message_history)
+        
+        # Save model settings
+        cl.user_session.set("settings", DEFAULT_SETTINGS)
+        
+        await cl.Message(
+            content="Hello! I'm your AI assistant powered by OpenAI. How can I help you today?"
+        ).send()
+        
+    except ValueError as e:
+        await cl.Message(
+            content=f"⚠️ Configuration Error: {str(e)}\nPlease make sure OPENAI_API_KEY is set in the environment variables."
+        ).send()
+    except Exception as e:
+        await cl.Message(
+            content=f"⚠️ Error initializing chat: {str(e)}\nPlease check your API key and try again."
+        ).send()
 
 
 @cl.on_message

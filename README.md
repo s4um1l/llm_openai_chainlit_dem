@@ -45,6 +45,27 @@ This app is configured for easy deployment on Hugging Face Spaces. The Docker co
 
 Remember to add your OpenAI API key as a secret in the Hugging Face Space settings.
 
+## Hugging Face Spaces Deployment
+
+To deploy this app on Hugging Face Spaces:
+
+1. Fork this repository to your GitHub account
+2. Create a new Space on Hugging Face:
+   - Choose "Docker" as the SDK
+   - Connect to your GitHub repository
+
+3. **Important**: Add your OpenAI API key to the Space:
+   - Go to your Space's Settings
+   - Find "Repository Secrets"
+   - Add a new secret:
+     - Name: `OPENAI_API_KEY`
+     - Value: Your OpenAI API key
+   - Click "Add Secret"
+
+4. The Space will automatically rebuild with your API key configured
+
+Note: Make sure your OpenAI API key has sufficient credits and proper permissions.
+
 ## License
 
 MIT
