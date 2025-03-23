@@ -1,4 +1,8 @@
 .env
 .venv
-.chainlit
 __pycache__
+# Keep chainlit config
+!.chainlit/
+!.chainlit/config.toml
+# Ignore translations
+/app/.chainlit/translations/
